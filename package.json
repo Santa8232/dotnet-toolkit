@@ -1,0 +1,87 @@
+{
+  "name": "dotnet-toolkit",
+  "publisher": "696effca-cbc1-660b-8ec3-d4c2668984a1",
+  "displayName": ".NET Developer Toolkit",
+  "icon": "media/extension-icon.png",
+  "description": "ASP.NET Core MVC and API scaffolding, build controls, and API testing",
+  "author": "Santa Mayengbam",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.140.0"
+  },
+  "categories": [
+    "Other",
+    "Programming Languages"
+  ],
+  "keywords": [
+    "dotnet",
+    "aspnet-core",
+    "mvc",
+    "crud",
+    "entity-framework",
+    "api"
+  ],
+  "main": "./extension.js",
+  "activationEvents": [
+    "onView:dotnetCrudPanel"
+  ],
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "dotnetTools",
+          "title": ".NET Tools",
+          "icon": "media/dotnet.svg"
+        }
+      ]
+    },
+    "views": {
+      "dotnetTools": [
+        {
+          "id": "dotnetCrudPanel",
+          "name": ".NET Developer Toolkit",
+          "icon": "media/dotnet.svg",
+          "type": "webview"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "dotnetCrud.refreshProjects",
+        "title": ".NET Tools: Refresh Projects"
+      },
+      {
+        "command": "dotnetCrud.build",
+        "title": ".NET Tools: Build"
+      },
+      {
+        "command": "dotnetCrud.run",
+        "title": ".NET Tools: Run"
+      },
+      {
+        "command": "dotnetCrud.watch",
+        "title": ".NET Tools: Watch"
+      }
+    ],
+    "configuration": {
+      "title": ".NET Developer Toolkit",
+      "properties": {
+        "dotnetCrud.defaultConfiguration": {
+          "type": "string",
+          "enum": [
+            "Debug",
+            "Release"
+          ],
+          "default": "Debug",
+          "description": "Default .NET build configuration."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "test": "node --test",
+    "check": "node --check extension.js"
+  },
+  "devDependencies": {},
+  "license": "MIT"
+}

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src {{cspSource}}; script-src 'nonce-{{nonce}}' {{cspSource}};">
+    <link rel="stylesheet" href="{{styleUri}}">
+    <title>.NET Developer Toolkit</title>
+</head>
+<body>
+    <main class="toolkit">
+        <header class="page-header">
+            <div class="brand-mark" aria-hidden="true">.NET</div>
+            <div class="brand-copy">
+                <h1>.NET Toolkit</h1>
+                <p>Build, run, and scaffold your app.</p>
+            </div>
+            <button id="refresh" class="icon-button" type="button" title="Refresh projects" aria-label="Refresh projects">
+                <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13.2 7a5.3 5.3 0 0 0-9.8-2L2 6.4M2 3v3.5h3.5M2.8 9a5.3 5.3 0 0 0 9.8 2l1.4-1.4M14 13V9.5h-3.5"/></svg>
+            </button>
+        </header>
+
+        <section class="section project-section" aria-labelledby="project-heading">
+            <div class="section-heading">
+                <div>
+                    <h2 id="project-heading">Your project</h2>
+                    <p class="section-description">Choose a .NET project in this workspace.</p>
+                </div>
+                <span id="project-count" class="count-badge" hidden></span>
+            </div>
+            <label class="sr-only" for="project">Select project</label>
+            <select id="project" aria-describedby="project-help" disabled>
+                <option value="">Searching workspace…</option>
+            </select>
+            <p id="project-help" class="field-hint">Projects are detected from .csproj files.</p>
+            <button id="open-folder" class="text-button" type="button" hidden>Open a folder to get started</button>
+        </section>
+
+        <section class="section" aria-labelledby="api-endpoints-heading">
+            <div class="section-heading">
+                <div>
+                    <h2 id="api-endpoints-heading">API endpoints</h2>
+                    <p class="section-description">Detected routes in the selected project.</p>
+                </div>
+            </div>
+            <label class="sr-only" for="api-endpoint">Select API endpoint</label>
+            <select id="api-endpoint" aria-describedby="api-endpoint-help" disabled>
+                <option value="">Select a project to find API endpoints</option>
+            </select>
+            <p id="api-endpoint-help" class="field-hint">Endpoints are detected from API controllers and minimal API route mappings.</p>
+        </section>
+
+        <details class="section database-section">
+            <summary>
+                <span>
+                    <strong>PostgreSQL database</strong>
+                    <small id="database-summary">Connect securely to apply migrations.</small>
+                </span>
+                <span class="disclosure" aria-hidden="true"></span>
+            </summary>
+            <div class="database-fields">
+                <label for="database-context">Entity Framework DbContext</label>
+                <select id="database-context" disabled>
+                    <option value="">Select a DbContext</option>
+                </select>
+                <p id="database-context-help" class="field-hint">Create a starter context to enable the database connection.</p>
+                <button id="create-db-context" class="text-button" type="button" hidden>Create a starter DbContext</button>
+                <label for="database-host">Host</label>
+                <input id="database-host" type="text" placeholder="localhost" autocomplete="off" required disabled>
+                <div class="field-row">
+                    <div>
+                        <label for="database-port">Port</label>
+                        <input id="database-port" type="number" min="1" max="65535" value="5432" required disabled>
+                    </div>
+                    <div>
+                        <label for="database-name">Database</label>
+                        <input id="database-name" type="text" placeholder="my_app" autocomplete="off" required disabled>
+                    </div>
+                </div>
+                <label for="database-username">Username</label>
+                <input id="database-username" type="text" autocomplete="username" required disabled>
+                <label for="database-password">Password</label>
+                <input id="database-password" type="password" autocomplete="new-password" required disabled>
+                <p class="field-hint">Credentials are saved in VS Code SecretStorage and are not written to your project files.</p>
+                <button id="connect-database" class="action-button create-button" type="button" disabled>
+                    <span>Connect &amp; apply migrations</span>
+                    <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2v12M2 8h12"/></svg>
+                </button>
+            </div>
+        </details>
+
+        <section class="section" aria-labelledby="commands-heading">
+            <div class="section-heading">
+                <div>
+                    <h2 id="commands-heading">Quick actions</h2>
+                    <p class="section-description">Run common .NET commands.</p>
+                </div>
+            </div>
+            <div class="action-grid">
+                <button class="action-button primary-action" data-command="run" type="button" disabled>
+                    <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m5 3 8 5-8 5z"/></svg>
+                    <span>Run</span>
+                </button>
+                <button class="action-button" data-command="build" type="button" disabled>
+                    <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m8 1 6 3.5v7L8 15l-6-3.5v-7zM2 4.5 8 8l6-3.5M8 8v7M5 2.7l6 3.6"/></svg>
+                    <span>Build</span>
+                </button>
+                <button class="action-button" data-command="watch" type="button" disabled>
+                    <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13.5 6A5.7 5.7 0 0 0 3 4L2 5m0 0V2m0 3h3m-2.5 5a5.7 5.7 0 0 0 10.5 2l1-1m0 0v3m0-3h-3"/></svg>
+                    <span>Watch</span>
+                </button>
+            </div>
+            <button id="stop-process" class="action-button stop-button" type="button" hidden>
+                <span>Stop application</span>
+            </button>
+        </section>
+
+        <section class="section scaffold-section" aria-labelledby="scaffold-heading">
+            <div class="section-heading">
+                <div>
+                    <h2 id="scaffold-heading">Add to your project</h2>
+                    <p class="section-description">Generate a starter file in seconds.</p>
+                </div>
+            </div>
+            <label for="scaffold-type">What would you like to add?</label>
+            <select id="scaffold-type" disabled>
+                <option value="mvc">MVC CRUD (controller + views)</option>
+                <option value="api">API controller</option>
+                <option value="model">Model</option>
+                <option value="updateModel">Update model (add property)</option>
+                <option value="dbContext">Database context</option>
+            </select>
+            <div id="mvc-options" class="mvc-options">
+                <label for="mvc-model">Model</label>
+                <select id="mvc-model" disabled>
+                    <option value="">Select a model</option>
+                </select>
+                <label for="mvc-context">Entity Framework DbContext</label>
+                <select id="mvc-context" disabled>
+                    <option value="">Select a DbContext</option>
+                </select>
+                <p id="mvc-help" class="field-hint">Select a model with an Id property and an Entity Framework DbContext.</p>
+            </div>
+            <div id="custom-name">
+                <label for="name">Name</label>
+                <input id="name" type="text" autocomplete="off" placeholder="e.g. Product" aria-describedby="name-help" disabled>
+                <p id="name-help" class="field-hint">Use a simple C# name, like <code>Product</code>.</p>
+            </div>
+            <div id="model-update-options" hidden>
+                <label for="update-model">Model to update</label>
+                <select id="update-model" disabled>
+                    <option value="">Select a model</option>
+                </select>
+                <label for="property-name">New property name</label>
+                <input id="property-name" type="text" autocomplete="off" placeholder="e.g. Price" disabled>
+                <label for="property-type">Property type</label>
+                <input id="property-type" type="text" value="string" placeholder="e.g. decimal" disabled>
+                <p class="field-hint">Adds a property without replacing your model code, then creates and applies an EF Core migration.</p>
+            </div>
+            <button id="create" class="action-button create-button" type="button" disabled>
+                <span>Generate scaffold</span>
+                <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2v12M2 8h12"/></svg>
+            </button>
+        </section>
+
+        <div id="status" class="status" role="status" aria-live="polite" aria-atomic="true">
+            <span class="status-indicator" aria-hidden="true"></span>
+            <span id="status-message">Looking for .NET projects…</span>
+        </div>
+    </main>
+    <script nonce="{{nonce}}" src="{{scriptUri}}"></script>
+</body>
+</html>
